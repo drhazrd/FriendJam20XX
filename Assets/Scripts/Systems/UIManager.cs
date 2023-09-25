@@ -1,18 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public static UIManager instance;
+    public CanvasGroup blackOut;
+
+    void Awake(){
+         if(UIManager.instance == null){
+            instance = this;
+        } else if (UIManager.instance != this && UIManager.instance != null){
+            Destroy(this);
+        }
+    }
     void Start()
     {
-        
+        blackOut.alpha = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void BlackOut(){
+        StartCoroutine(BlackOutProcess());
+
+    }
+    IEnumerator BlackOutProcess()
     {
+
+        blackOut.alpha = 1;
+        yield return new WaitForSeconds(.3f);
+        blackOut.alpha = 0;
         
     }
 }

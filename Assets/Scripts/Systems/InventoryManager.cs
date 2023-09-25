@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public static InventoryManager inventory;
+
+    [SerializeField] int baseItemCount;
+    [SerializeField] int keyItemCount;
+
     void Start()
     {
-        
+        inventory = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void BaseItemCollected(int value)
     {
-        
+        baseItemCount += value;
+    }
+    
+    public void KeyItemCollected()
+    {
+        keyItemCount ++;
     }
 }

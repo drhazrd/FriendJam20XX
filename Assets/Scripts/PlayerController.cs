@@ -97,7 +97,9 @@ public class PlayerController : MonoBehaviour
 
     public void Teleport(Transform newPosition)
     {
+        UIManager.instance.BlackOut();
         mover.position = newPosition.position;
+
     }
 
     private bool IsGrounded()
