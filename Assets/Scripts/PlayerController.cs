@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && canInteract)
         {
+            anim.SetTrigger("interact");
             interactableObject.GetComponent<InteractableObject>().Interact();
         }
     }
@@ -71,7 +72,6 @@ public class PlayerController : MonoBehaviour
     {
         float runAnimMultiplier = 1.2f;
         anim.SetFloat("moveSpeed", _rb.velocity.normalized.magnitude * runAnimMultiplier);
-        anim.SetFloat("jumpHeight", _rb.velocity.y);
         _rb.AddForce(new Vector3(0, 0, XAxis * moveSpeed));
 
         if (XAxis > 0.1f)
@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
     {
         if (jump && IsGrounded())
         {
-            Debug.Log("Jump");
+            anim.SetTrigger("jump");
             _rb.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
         }
     }
@@ -105,7 +105,11 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         Vector3 offset = new Vector3(0, 0.1f, 0);
-        return Physics.Raycast(mover.position + offset, -Vector3.up, 0.2f);
+        bool isAirborn = Physics.Raycast(mover.position + offset, -Vector3.up, 0.2f);
+
+        anim.SetBool("isAirborn", isAirborn);
+
+        return isAirborn;
     }
 
     public void SetInteractableObject(Collider c)
