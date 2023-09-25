@@ -51,9 +51,30 @@ public class PlayerController : MonoBehaviour
                 if (c.CompareTag("Interactable"))
                 {
                     canInteract = true;
-                    SetInteractableObject(c);
-                    break;
                 }
+            }
+
+            // if there is more than one interactableobject, set the closest one
+            if (canInteract)
+            {
+                float closestDistance = Mathf.Infinity;
+                Collider closestCol = null;
+
+                foreach (Collider c in interactCols)
+                {
+                    if (c.CompareTag("Interactable"))
+                    {
+                        float distance = Vector3.Distance(mover.position, c.transform.position);
+
+                        if (distance < closestDistance)
+                        {
+                            closestDistance = distance;
+                            closestCol = c;
+                        }
+                    }
+                }
+
+                SetInteractableObject(closestCol);
             }
         }
         else
@@ -64,7 +85,13 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && canInteract)
         {
             anim.SetTrigger("interact");
-            interactableObject.GetComponent<InteractableObject>().Interact();
+
+            InteractableObject io = interactableObject.GetComponent<InteractableObject>();
+
+            if (io)
+            {
+                io.Interact();
+            }
         }
     }
 
@@ -115,5 +142,17 @@ public class PlayerController : MonoBehaviour
     public void SetInteractableObject(Collider c)
     {
         interactableObject = c.gameObject;
+
+        Item item = c.GetComponent<Item>();
+
+        if (item)
+        {
+            Vector2 screenPosition = Camera.main.WorldToScreenPoint(c.transform.position);
+            FindObjectOfType<UIManager>().SetPickupUI(item, screenPosition);
+        }
+        else
+        {
+            FindObjectOfType<UIManager>().pickupUI.SetActive(false);
+        }
     }
 }
