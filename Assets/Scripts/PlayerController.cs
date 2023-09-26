@@ -1,43 +1,59 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     public Transform mover;
     public Animator anim;
+    public InputActionAsset inputActions;
     public float moveSpeed;
     public float jumpHeight;
     public float interactRange = 5;
     private float XAxis = 0;
+    public Vector3 moveDirection = Vector3.zero;
     private bool jump = false;
     private Rigidbody _rb;
     private bool isRight = true;
-    private bool canInteract = false;
+    private bool canUse = false;
     private GameObject interactableObject;
     private Collider[] interactCols;
+
+    //actions
+    private InputAction moveAction;
+    private InputAction jumpAction;
+    private InputAction useAction;
+
+    private void OnEnable()
+    {
+        inputActions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Disable();
+    }
 
     private void Start()
     {
         _rb = mover.GetComponent<Rigidbody>();
+
+        moveAction = inputActions.FindActionMap("Gameplay").FindAction("Move");
+
+        inputActions.FindActionMap("Gameplay").FindAction("Jump").performed += ctx => jump = ctx.ReadValue<float>() > 0.1f;
+        inputActions.FindActionMap("Gameplay").FindAction("Use").performed += ctx => Use();
     }
 
     void Update()
     {
-        ProcessInput();
+        moveDirection = moveAction.ReadValue<Vector2>();
         CheckInteractions();
     }
 
     private void FixedUpdate()
     {
         Move();
-        Jump();
-    }
-
-    private void ProcessInput()
-    {
-        XAxis = Input.GetAxis("Horizontal");
-        jump = Input.GetButtonDown("Jump");
     }
 
     private void CheckInteractions()
@@ -50,12 +66,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (c.CompareTag("Interactable"))
                 {
-                    canInteract = true;
+                    canUse = true;
                 }
             }
 
             // if there is more than one interactableobject, set the closest one
-            if (canInteract)
+            if (canUse)
             {
                 float closestDistance = Mathf.Infinity;
                 Collider closestCol = null;
@@ -79,19 +95,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            canInteract = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && canInteract)
-        {
-            anim.SetTrigger("interact");
-
-            InteractableObject io = interactableObject.GetComponent<InteractableObject>();
-
-            if (io)
-            {
-                io.Interact();
-            }
+            canUse = false;
         }
     }
 
@@ -99,7 +103,7 @@ public class PlayerController : MonoBehaviour
     {
         float runAnimMultiplier = 1.2f;
         anim.SetFloat("moveSpeed", _rb.velocity.normalized.magnitude * runAnimMultiplier);
-        _rb.AddForce(new Vector3(0, 0, XAxis * moveSpeed));
+        _rb.AddForce(new Vector3(-moveDirection.y * moveSpeed, 0, moveDirection.x * moveSpeed));
 
         if (XAxis > 0.1f)
         {
@@ -119,6 +123,21 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetTrigger("jump");
             _rb.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
+        }
+    }
+
+    private void Use()
+    {
+        if (canUse)
+        {
+            anim.SetTrigger("interact");
+
+            InteractableObject io = interactableObject.GetComponent<InteractableObject>();
+
+            if (io)
+            {
+                io.Interact();
+            }
         }
     }
 

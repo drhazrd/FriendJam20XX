@@ -48,9 +48,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mover: {fileID: 7317875764028988351}
   anim: {fileID: 2170806796354156471}
+  inputActions: {fileID: -944628639613478452, guid: 67c486a8322cda645a5a246f6450f832, type: 3}
   moveSpeed: 1500
-  jumpHeight: 1000
+  jumpHeight: 400
   interactRange: 5
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &7258111835176331304
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +78,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7258111835176331304}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07449427, y: -0.7031718, z: 0.074494265, w: 0.70317185}
+  m_LocalRotation: {x: 0.07449427, y: -0.7031718, z: 0.07449427, w: 0.70317185}
   m_LocalPosition: {x: 7, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
