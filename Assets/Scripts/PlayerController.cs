@@ -90,6 +90,11 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
+                if (closestCol == null)
+                {
+                    return;
+                }
+
                 SetInteractableObject(closestCol);
             }
         }
@@ -105,11 +110,11 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("moveSpeed", _rb.velocity.normalized.magnitude * runAnimMultiplier);
         _rb.AddForce(new Vector3(-moveDirection.y * moveSpeed, 0, moveDirection.x * moveSpeed));
 
-        if (XAxis > 0.1f)
+        if (moveDirection.x > 0.1f)
         {
             isRight = true;
         }
-        else if (XAxis < -0.1f)
+        else if (moveDirection.x < -0.1f)
         {
             isRight = false;
         }
@@ -160,6 +165,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetInteractableObject(Collider c)
     {
+        if (!c) return;
         interactableObject = c.gameObject;
 
         Item item = c.GetComponent<Item>();
