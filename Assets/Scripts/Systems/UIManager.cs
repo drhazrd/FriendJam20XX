@@ -46,7 +46,8 @@ public class UIManager : MonoBehaviour
         TextMeshProUGUI textMesh = pickupUI.GetComponentInChildren<TextMeshProUGUI>();
         textMesh.text = item.itemName;
         textMesh.color = RarityColor(item.rarity);
-        pickupUI.transform.position = Vector2.Lerp(pickupUI.transform.position, position, 0.1f);
+        Vector2 offset = new Vector2(0, 50);
+        pickupUI.transform.position = Vector2.Lerp(pickupUI.transform.position, position + offset, 0.1f);
         pickupUI.SetActive(true);
     }
 

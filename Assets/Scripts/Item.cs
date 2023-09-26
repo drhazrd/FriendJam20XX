@@ -15,4 +15,10 @@ public class Item : MonoBehaviour
     public int value = 1;
     public string itemName = "Item";
     public Rarity rarity;
+
+    public void Collect()
+    {
+        // PlayerController.instance.CollectItem(this);
+        Destroy(gameObject);
+    }
 }
