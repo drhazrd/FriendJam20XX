@@ -165,6 +165,7 @@ public class PlayerController : MonoBehaviour
     {
         if (canUse)
         {
+            anim.SetFloat("randomPickupAnim", Mathf.Round(Random.Range(0, 1)));
             anim.SetTrigger("interact");
 
             InteractableObject io = interactableObject.GetComponent<InteractableObject>();
