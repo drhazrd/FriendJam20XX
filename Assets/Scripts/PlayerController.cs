@@ -6,15 +6,17 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public Transform mover;
+    public CharacterController controller;
     public Animator anim;
     public InputActionAsset inputActions;
     public float moveSpeed;
     public float jumpHeight;
     public float interactRange = 5;
+
     private float XAxis = 0;
-    public Vector3 moveDirection = Vector3.zero;
+    private Vector3 moveDirection = Vector3.zero;
     private bool jump = false;
-    private Rigidbody _rb;
+    // private Rigidbody _rb;
     private bool isRight = true;
     private bool canUse = false;
     private GameObject interactableObject;
@@ -37,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _rb = mover.GetComponent<Rigidbody>();
+        // _rb = mover.GetComponent<Rigidbody>();
 
         moveAction = inputActions.FindActionMap("Gameplay").FindAction("Move");
 
@@ -106,20 +108,33 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float runAnimMultiplier = 1.2f;
-        anim.SetFloat("moveSpeed", _rb.velocity.normalized.magnitude * runAnimMultiplier);
-        _rb.AddForce(new Vector3(-moveDirection.y * moveSpeed, 0, moveDirection.x * moveSpeed));
+        float runAnimMultiplier = 0.2f;
+        anim.SetFloat("moveSpeed", controller.velocity.magnitude * runAnimMultiplier);
 
-        if (moveDirection.x > 0.1f)
+        Vector3 moveDir = new Vector3(-moveDirection.y, 0, moveDirection.x);
+
+        // rotate mover to face direction of movement
+        Vector3 mappedDirection = Vector3.ProjectOnPlane(moveDir, Vector3.up);
+
+        // if movedir is zero, don't rotate
+        if (mappedDirection != Vector3.zero)
         {
-            isRight = true;
-        }
-        else if (moveDirection.x < -0.1f)
-        {
-            isRight = false;
+            Quaternion q1 = mover.rotation;
+            Quaternion q2 = Quaternion.LookRotation(mappedDirection);
+            mover.rotation = Quaternion.Lerp(q1, q2, 0.1f);
         }
 
-        anim.gameObject.transform.rotation = Quaternion.Euler(0, isRight ? 0 : 180, 0);
+        Vector3 prevPos = controller.transform.position;
+
+        controller.Move(controller.transform.forward * moveSpeed * mappedDirection.magnitude * Time.deltaTime);
+
+        bool isOnGround = MapToFloor();
+
+        // if there is no ground underneath controller, go back to prevPos
+        if (!isOnGround)
+        {
+            controller.transform.position = prevPos;
+        }
     }
 
     private void Jump()
@@ -127,8 +142,19 @@ public class PlayerController : MonoBehaviour
         if (jump && IsGrounded())
         {
             anim.SetTrigger("jump");
-            _rb.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
+            // _rb.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
         }
+    }
+
+    private bool MapToFloor()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(mover.position, -Vector3.up, out hit, 1.5f))
+        {
+            mover.position = hit.point;
+            return true;
+        }
+        return false;
     }
 
     private void Use()
