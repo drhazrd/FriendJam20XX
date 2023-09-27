@@ -9,12 +9,7 @@ public class ItemSpawner : MonoBehaviour
     public int maxItems = 5;
     public int minItems = 0;
 
-    void Start()
-    {
-        SpawnItems();
-    }
-
-    private void SpawnItems()
+    public void SpawnItems()
     {
         int numItems = Random.Range(minItems, maxItems);
         for (int i = 0; i < numItems; i++)
@@ -36,7 +31,6 @@ public class ItemSpawner : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         // draw a circle for the spawn radius
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, spawnRadius);
     }

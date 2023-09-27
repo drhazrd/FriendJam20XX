@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class ItemSpawnManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [Range(1, 100)] public float spawnClusterDensity = 100;
+
     void Start()
     {
-        
-    }
+        ItemSpawner[] spawners = GetComponentsInChildren<ItemSpawner>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        foreach (ItemSpawner spawner in spawners)
+        {
+            int r = Random.Range(0, 100);
+
+            if (r < spawnClusterDensity)
+            {
+                spawner.SpawnItems();
+            }
+        }
     }
 }
