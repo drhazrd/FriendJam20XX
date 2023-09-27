@@ -5,12 +5,19 @@ using UnityEngine;
 public class ItemSpawner : MonoBehaviour
 {
     public GameObject[] itemPool;
+    public GameObject setDressing;
     public float spawnRadius;
     public int maxItems = 5;
     public int minItems = 0;
 
     public void SpawnItems()
     {
+        if (setDressing != null)
+        {
+            // spawn set dressing
+            GameObject setDress = Instantiate(setDressing, transform.position, Quaternion.identity);
+        }
+
         int numItems = Random.Range(minItems, maxItems);
         for (int i = 0; i < numItems; i++)
         {
