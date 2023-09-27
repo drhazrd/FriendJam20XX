@@ -53,6 +53,7 @@ MonoBehaviour:
   moveSpeed: 5
   jumpHeight: 1
   interactRange: 2
+  runAnimationMultiplier: 1.6
 --- !u!1 &6217950892172131157
 GameObject:
   m_ObjectHideFlags: 0

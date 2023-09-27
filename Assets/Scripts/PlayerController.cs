@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float jumpHeight;
     public float interactRange = 5;
+    public float runAnimationMultiplier;
 
     private float XAxis = 0;
     private Vector3 moveDirection = Vector3.zero;
@@ -112,8 +113,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float runAnimMultiplier = 0.2f;
-        anim.SetFloat("moveSpeed", controller.velocity.magnitude * runAnimMultiplier);
+        anim.SetFloat("moveSpeed", controller.velocity.normalized.magnitude * runAnimationMultiplier);
 
         Vector3 moveDir = new Vector3(-moveDirection.y, 0, moveDirection.x);
 
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
     {
         if (canUse)
         {
-            anim.SetFloat("randomPickupAnim", Mathf.Round(Random.Range(0, 1)));
+            // anim.SetFloat("randomPickupAnim", Mathf.Round(Random.Range(0, 1)));
             anim.SetTrigger("interact");
 
             InteractableObject io = interactableObject.GetComponent<InteractableObject>();
@@ -210,11 +210,13 @@ public class PlayerController : MonoBehaviour
         {
             Vector2 screenPosition = Camera.main.WorldToScreenPoint(c.transform.position);
             uiManager.SetPickupUI(item, screenPosition);
+            return;
         }
         else if (io)
         {
             Vector2 screenPosition = Camera.main.WorldToScreenPoint(c.transform.position);
             uiManager.SetPickupUI(io, screenPosition);
+            return;
         }
         else
         {
