@@ -51,6 +51,17 @@ public class UIManager : MonoBehaviour
         pickupUI.SetActive(true);
     }
 
+    public void SetPickupUI(InteractableObject io, Vector2 position)
+    {
+        pickupUI.SetActive(false);
+        TextMeshProUGUI textMesh = pickupUI.GetComponentInChildren<TextMeshProUGUI>();
+        textMesh.text = io.promptText;
+        textMesh.color = Color.white;
+        Vector2 offset = new Vector2(0, 50);
+        pickupUI.transform.position = Vector2.Lerp(pickupUI.transform.position, position + offset, 0.1f);
+        pickupUI.SetActive(true);
+    }
+
     private Color RarityColor(Rarity r)
     {
         if (r == Rarity.Common)

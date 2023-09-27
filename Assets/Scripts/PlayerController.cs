@@ -204,11 +204,17 @@ public class PlayerController : MonoBehaviour
         interactableObject = c.gameObject;
 
         Item item = c.GetComponent<Item>();
+        InteractableObject io = c.GetComponent<InteractableObject>();
 
         if (item)
         {
             Vector2 screenPosition = Camera.main.WorldToScreenPoint(c.transform.position);
             uiManager.SetPickupUI(item, screenPosition);
+        }
+        else if (io)
+        {
+            Vector2 screenPosition = Camera.main.WorldToScreenPoint(c.transform.position);
+            uiManager.SetPickupUI(io, screenPosition);
         }
         else
         {
