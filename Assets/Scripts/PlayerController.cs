@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     private InputAction moveAction;
     private InputAction jumpAction;
     private InputAction useAction;
+    private UIManager uiManager;
 
     private void OnEnable()
     {
@@ -45,6 +46,8 @@ public class PlayerController : MonoBehaviour
 
         inputActions.FindActionMap("Gameplay").FindAction("Jump").performed += ctx => jump = ctx.ReadValue<float>() > 0.1f;
         inputActions.FindActionMap("Gameplay").FindAction("Use").performed += ctx => Use();
+
+        uiManager = UIManager.instance;
     }
 
     void Update()
@@ -94,6 +97,7 @@ public class PlayerController : MonoBehaviour
 
                 if (closestCol == null)
                 {
+                    uiManager.pickupUI.SetActive(false);
                     return;
                 }
 
@@ -191,7 +195,11 @@ public class PlayerController : MonoBehaviour
 
     public void SetInteractableObject(Collider c)
     {
-        if (!c) return;
+        if (!c)
+        {
+            uiManager.pickupUI.SetActive(false);
+            return;
+        }
         interactableObject = c.gameObject;
 
         Item item = c.GetComponent<Item>();
@@ -199,11 +207,11 @@ public class PlayerController : MonoBehaviour
         if (item)
         {
             Vector2 screenPosition = Camera.main.WorldToScreenPoint(c.transform.position);
-            FindObjectOfType<UIManager>().SetPickupUI(item, screenPosition);
+            uiManager.SetPickupUI(item, screenPosition);
         }
         else
         {
-            FindObjectOfType<UIManager>().pickupUI.SetActive(false);
+            uiManager.pickupUI.SetActive(false);
         }
     }
 }
