@@ -9,6 +9,8 @@ public class DialogueSystem : MonoBehaviour
     public static DialogueSystem instance;
      
     [Header("References")]
+    public GameObject dialogBoxObject;
+    public bool dialogueActive;
     public TextMeshProUGUI speakerText;
     public TextMeshProUGUI dialogueText;
     public float textSpeed = 0.05f;
@@ -38,6 +40,7 @@ public class DialogueSystem : MonoBehaviour
     
     void Start(){
         //playerControls.Player.Interact.performed += _ => ContinueDialogue();
+        dialogBoxObject.SetActive(dialogueActive);
         dialogueQueue = new Queue<DialogueLine>();
     }
 
@@ -54,7 +57,9 @@ public class DialogueSystem : MonoBehaviour
         }
     }
     void CompleteDialogue(){
-        //End Dialogue
+        dialogueActive = false;
+        dialogBoxObject.SetActive(dialogueActive);
+        dialogBoxObject.GetComponent<CanvasGroup>().alpha = Mathf.MoveTowards(1f, 0f, 0.2f);
     }
 
     public void StartDialogue(DialogueSequence dialogue){
@@ -62,12 +67,15 @@ public class DialogueSystem : MonoBehaviour
         foreach (var line in dialogue.lines){
             dialogueQueue.Enqueue(line);
         }
+        dialogueActive = true;
+        dialogBoxObject.SetActive(dialogueActive);
+        dialogBoxObject.GetComponent<CanvasGroup>().alpha = Mathf.MoveTowards(0f, 1f, 0.2f);
         StartCoroutine(TypeDialogue(dialogueQueue.Dequeue()));
+        speakerText.text = dialogue.speaker;
     }
 
     IEnumerator TypeDialogue(DialogueLine line){
         isTyping = true;
-        speakerText.text = line.speaker;
         dialogueText.text = "";
         
         if (line.speakingSFX != null) { 

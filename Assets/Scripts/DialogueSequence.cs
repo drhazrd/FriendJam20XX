@@ -7,13 +7,13 @@ using UnityEngine;
 
 public class DialogueSequence : ScriptableObject
 {
+    public string speaker;
     public List<DialogueLine> lines;
 }
 
 [Serializable]
 public class DialogueLine
 {
-    public string speaker;
     public string text;
     public AudioClip speakingSFX;
 }

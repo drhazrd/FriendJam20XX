@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     public CanvasGroup blackOut;
     public GameObject pickupUI;
+    public GameObject interactUI;
 
     void Awake()
     {
@@ -23,7 +24,7 @@ public class UIManager : MonoBehaviour
     }
     void Start()
     {
-        blackOut.alpha = 0;
+        ResetUI();
     }
 
     public void BlackOut()
@@ -34,9 +35,9 @@ public class UIManager : MonoBehaviour
     IEnumerator BlackOutProcess()
     {
 
-        blackOut.alpha = 1;
+        blackOut.alpha = Mathf.MoveTowards(0f, 1f, 0.1f);
         yield return new WaitForSeconds(.3f);
-        blackOut.alpha = 0;
+        blackOut.alpha = Mathf.MoveTowards(1f, 0f, 0.1f);
 
     }
 
@@ -73,5 +74,10 @@ public class UIManager : MonoBehaviour
         {
             return Color.white;
         }
+    }
+    void ResetUI(){
+        blackOut.alpha = 0;
+        interactUI.SetActive(false);
+        pickupUI.SetActive(false);
     }
 }
