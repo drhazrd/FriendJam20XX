@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class InteractableObject : MonoBehaviour
 {
     public UnityEvent OnInteractEvent;
+    public string promptText;
 
     public void Interact()
     {
