@@ -35,9 +35,11 @@ public class UIManager : MonoBehaviour
     IEnumerator BlackOutProcess()
     {
 
-        blackOut.alpha = Mathf.MoveTowards(0f, 1f, 0.1f);
-        yield return new WaitForSeconds(.3f);
-        blackOut.alpha = Mathf.MoveTowards(1f, 0f, 0.1f);
+        blackOut.alpha = Mathf.MoveTowards(1f, 0f, 0.5f);
+        blackOut.alpha = 1f;
+        yield return new WaitForSeconds(1f);
+        blackOut.alpha = Mathf.MoveTowards(0f, 1f, 0.5f);
+        blackOut.alpha = 0f;
 
     }
 

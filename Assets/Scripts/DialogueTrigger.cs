@@ -35,4 +35,12 @@ public class DialogueTrigger : MonoBehaviour
             player = null;
         }
     }
+    public void Speak(){
+        if(playerHere){
+            DialogueSystem.instance.Talk(dialog);
+            canTalk = false;
+        } else {
+            canTalk = true;
+        }
+    }
 }

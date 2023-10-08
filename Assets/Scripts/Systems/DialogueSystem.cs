@@ -87,4 +87,8 @@ public class DialogueSystem : MonoBehaviour
         }
         isTyping = false; 
     }
+    public void Talk(DialogueSequence dialog){
+        if(!dialogueActive){StartDialogue(dialog);}
+        else{ContinueDialogue();}
+    }
 }
