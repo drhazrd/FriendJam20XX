@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyslcck8j71kk"]
+
+[ext_resource type="Script" uid="uid://bo10hby6fj6be" path="res://Scripts/player.gd" id="1_kwdmc"]
+[ext_resource type="Texture2D" uid="uid://ckodo4u7mvjsf" path="res://Images/square.png" id="1_udx2p"]
+[ext_resource type="Script" uid="uid://dmj370uabscjd" path="res://Scripts/attack.gd" id="3_13dxr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kwdmc"]
+size = Vector2(50, 50)
+
+[node name="GaMELooP" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+script = ExtResource("1_kwdmc")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+position = Vector2(0, 2)
+texture = ExtResource("1_udx2p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_kwdmc")
+
+[node name="Node" type="Marker2D" parent="Player" node_paths=PackedStringArray("attackPoint")]
+position = Vector2(111, 0)
+script = ExtResource("3_13dxr")
+attackPoint = NodePath(".")
+
+[node name="Level" type="Node2D" parent="."]
+position = Vector2(1, 59)
+scale = Vector2(18.04, 1)
+
+[node name="Ground" type="StaticBody2D" parent="Level"]
+position = Vector2(1.49667, 177)
+scale = Vector2(2.92683, 4.96)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Level/Ground"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_kwdmc")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Level/Ground"]
+self_modulate = Color(0.597936, 0.587757, 0.573873, 1)
+position = Vector2(0, 2)
+texture = ExtResource("1_udx2p")
+
+[node name="Sky" type="Sprite2D" parent="Level"]
+modulate = Color(0.552941, 0.823529, 1, 1)
+z_index = -5
+position = Vector2(0, 2)
+scale = Vector2(4190.37, 32.9751)
+texture = ExtResource("1_udx2p")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

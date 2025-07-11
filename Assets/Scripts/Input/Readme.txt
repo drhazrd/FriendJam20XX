@@ -1,1 +1,0 @@
-This folder is for input maps and input scripts
